@@ -35,3 +35,21 @@ export const updateGroup = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getGroup = async (req, res, next) => {
+  try {
+    const group = await Group.findById(req.params.id);
+    res.status(200).json(group);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getGroups = async (req, res, next) => {
+  try {
+    const groups = await Group.find();
+    res.status(200).json(groups);
+  } catch (error) {
+    next(error);
+  }
+};
