@@ -44,7 +44,7 @@ export const deletePost = async (req, res, next) => {
 
     if (req.user.id === post.userId) {
       await Post.findByIdAndDelete(req.params.id);
-      res.status(200).json("Successfully deleted video.");
+      res.status(200).json("Successfully deleted post.");
     } else {
       next(createError(403, "You can only delete your own post."));
     }

@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { createError } from "../error.js";
 import Group from "../models/Group.js";
+import Post from "../models/Post.js";
+import User from "../models/User.js";
 
 export const addGroup = async (req, res, next) => {
   try {
@@ -14,6 +16,10 @@ export const addGroup = async (req, res, next) => {
 
 export const deleteGroup = async (req, res, next) => {
   try {
+    const posts = await Post.deleteMany({ groupId: req.params.id });
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: { subscribedGroups: req.params.id },
+    });
     await Group.findByIdAndDelete(req.params.id);
     res.status(200).json("Successfully deleted group.");
   } catch (error) {
