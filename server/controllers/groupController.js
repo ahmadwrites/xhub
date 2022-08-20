@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { createError } from "../error.js";
+import Comment from "../models/Comment.js";
 import Group from "../models/Group.js";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
@@ -16,7 +17,9 @@ export const addGroup = async (req, res, next) => {
 
 export const deleteGroup = async (req, res, next) => {
   try {
-    const posts = await Post.deleteMany({ groupId: req.params.id });
+    const posts = await Post.find({ groupId: req.params.id });
+    await Comment.deleteMany({ postId: posts[0]._id });
+    await Post.deleteMany({ groupId: req.params.id });
     await User.findByIdAndUpdate(req.user.id, {
       $pull: { subscribedGroups: req.params.id },
     });

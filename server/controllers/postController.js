@@ -3,6 +3,7 @@ import Post from "../models/Post.js";
 import User from "../models/User.js";
 import Group from "../models/Group.js";
 import { createError } from "../error.js";
+import Comment from "../models/Comment.js";
 
 export const addPost = async (req, res, next) => {
   const newPost = new Post({ userId: req.user.id, ...req.body });
@@ -43,6 +44,7 @@ export const deletePost = async (req, res, next) => {
     if (!post) return next(createError(404, "Post does not exist."));
 
     if (req.user.id === post.userId) {
+      await Comment.deleteMany({ groupId: post.groupId });
       await Post.findByIdAndDelete(req.params.id);
       res.status(200).json("Successfully deleted post.");
     } else {
