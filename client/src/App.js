@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar";
 import Group from "./pages/Group";
 import Groups from "./pages/Groups";
 import Home from "./pages/Home";
-import Signin from "./pages/Signin";
+import Signup from "./pages/Signup";
 import theme from "./theme";
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
           <Route path="/">
             <Route index element={<Home />} />
             <Route path="trending" element={<Home type="trending" />} />
-            <Route path="signin" element={<Signin />} />
+            <Route path="Signup" element={<Signup />} />
             <Route path="groups">
               <Route index element={<Groups />} />
               <Route path=":id" element={<Group />} />

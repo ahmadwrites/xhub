@@ -16,13 +16,15 @@ import HomeIcon from "@mui/icons-material/Home";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { Link } from "react-router-dom";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 
 const LIST = [
   { name: "Home", to: "/", icon: <HomeIcon /> },
   { name: "Trending", to: "/trending", icon: <LocalFireDepartmentIcon /> },
   { name: "Groups", to: "/groups", icon: <GroupsIcon /> },
   { name: "About", to: "/about", icon: <InfoIcon /> },
-  { name: "Login", to: "/signin", icon: <LoginIcon /> },
+  { name: "Login", to: "/signup", icon: <LoginIcon /> },
+  { name: "Register", to: "/signup", icon: <AppRegistrationIcon /> },
 ];
 
 const DrawerComp = () => {

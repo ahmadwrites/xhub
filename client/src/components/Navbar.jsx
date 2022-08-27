@@ -86,7 +86,7 @@ const Navbar = () => {
                   </Link>
                 ))}
 
-                <Button component={RouterLink} to="/signin" variant="contained">
+                <Button component={RouterLink} to="/signup" variant="contained">
                   Register
                 </Button>
               </Box>
