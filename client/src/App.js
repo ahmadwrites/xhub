@@ -1,5 +1,31 @@
+import { ThemeProvider } from "@emotion/react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Group from "./pages/Group";
+import Groups from "./pages/Groups";
+import Home from "./pages/Home";
+import Signin from "./pages/Signin";
+import theme from "./theme";
+
 function App() {
-  return <div>Hello World</div>;
+  return (
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/">
+            <Route index element={<Home />} />
+            <Route path="trending" element={<Home type="trending" />} />
+            <Route path="signin" element={<Signin />} />
+            <Route path="groups">
+              <Route index element={<Groups />} />
+              <Route path=":id" element={<Group />} />
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
 }
 
 export default App;
