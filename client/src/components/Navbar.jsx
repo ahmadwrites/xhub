@@ -11,7 +11,6 @@ import {
   useTheme,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import SchoolIcon from "@mui/icons-material/School";
 import SearchIcon from "@mui/icons-material/Search";
 import DrawerComp from "./DrawerComp";
 import { Box } from "@mui/system";
@@ -42,9 +41,16 @@ const Navbar = () => {
             underline="none"
             sx={{ color: "inherit", display: "flex", alignItems: "center" }}
           >
-            <SchoolIcon />
-            <Typography variant="h6" ml={2}>
-              LabX
+            <Typography
+              variant="h6"
+              color="primary"
+              sx={{ fontWeight: 600 }}
+              ml={1}
+            >
+              X
+            </Typography>
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              Lab
             </Typography>
           </Link>
           <TextField
