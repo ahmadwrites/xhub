@@ -16,6 +16,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import DrawerComp from "./DrawerComp";
 import { Box } from "@mui/system";
 import { styled } from "@mui/material/styles";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/userSlice";
 
 const PAGES = [
   { id: 0, name: "Home", to: "/" },
@@ -26,8 +29,23 @@ const PAGES = [
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
 const Navbar = () => {
+  const { currentUser } = useSelector((state) => state.user);
   const theme = useTheme();
+  const dispatch = useDispatch();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
+
+  const signout = async () => {
+    try {
+      await axios.post("/auth/signout");
+      dispatch(logout());
+      window.location.href = "/";
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(currentUser);
+
   return (
     <>
       <AppBar elevation={0} position="fixed" sx={{ backgroundColor: "#333" }}>
@@ -85,10 +103,19 @@ const Navbar = () => {
                     {page.name}
                   </Link>
                 ))}
-
-                <Button component={RouterLink} to="/signup" variant="contained">
-                  Register
-                </Button>
+                {currentUser ? (
+                  <Button onClick={signout} variant="contained">
+                    Logout
+                  </Button>
+                ) : (
+                  <Button
+                    component={RouterLink}
+                    to="/signup"
+                    variant="contained"
+                  >
+                    Register
+                  </Button>
+                )}
               </Box>
             </>
           )}

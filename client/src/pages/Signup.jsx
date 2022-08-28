@@ -1,21 +1,83 @@
 import React, { useState } from "react";
 import {
   Button,
-  Divider,
   Grid,
   TextField,
   Typography,
   Link,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
-import { Link as RouterLink } from "react-router-dom";
+import axios from "axios";
 import xmum from "../img/xmum.jpg";
+import { useDispatch } from "react-redux";
+import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
 
 const Signup = () => {
   const theme = useTheme();
-  const [isSignup, setIsSignup] = useState(true);
   const toolbarHeight = theme.mixins.toolbar.minHeight;
+  const dispatch = useDispatch();
+
+  const [isSignup, setIsSignup] = useState(true);
+  const [userForm, setUserForm] = useState({
+    email: "",
+    username: "",
+    password: "",
+  });
+
+  const [open, setOpen] = useState(false);
+  const [alert, setAlert] = useState({ message: "", severity: "" });
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const handleChange = (e) => {
+    setUserForm({ ...userForm, [e.target.name]: e.target.value });
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post(`/auth/signup`, userForm);
+      setOpen(true);
+      setIsSignup(false);
+      setAlert({ message: res.data, severity: "success" });
+    } catch (error) {
+      setOpen(true);
+      setAlert({
+        message: error.response.data.message,
+        severity: "error",
+      });
+    }
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    dispatch(loginStart);
+
+    try {
+      const res = await axios.post("/auth/signin", userForm);
+      dispatch(loginSuccess(res.data));
+      setOpen(true);
+      setAlert({ message: res.data, severity: "success" });
+      window.location.href = "/";
+    } catch (error) {
+      dispatch(loginFailure());
+      setOpen(true);
+      setAlert({
+        message: error.response.data.message,
+        severity: "error",
+      });
+    }
+  };
 
   return (
     <Grid container sx={{ height: `calc(100vh - ${toolbarHeight}px)` }}>
@@ -57,37 +119,45 @@ const Signup = () => {
           </Box>
           {isSignup && (
             <TextField
+              onChange={handleChange}
+              name="email"
               placeholder="Email"
               label="Email"
-              sx={{ width: { xs: "350px", md: "500px" } }}
+              sx={{ width: { xs: "100%", md: "400px", lg: "500px" } }}
             />
           )}
           <TextField
+            onChange={handleChange}
+            name="username"
             placeholder="Username"
             label="Username"
-            sx={{ width: { xs: "350px", md: "500px" } }}
+            sx={{ width: { xs: "100%", md: "400px", lg: "500px" } }}
           />
           <TextField
+            onChange={handleChange}
+            name="password"
             placeholder="Password"
             label="Password"
             type="password"
-            sx={{ width: { xs: "350px", md: "500px" } }}
+            sx={{ width: { xs: "100%", md: "400px", lg: "500px" } }}
           />
           {isSignup ? (
             <Button
+              onClick={handleRegister}
               size="large"
               variant="contained"
               color="primary"
-              sx={{ width: { xs: "350px", md: "500px" } }}
+              sx={{ width: { xs: "100%", md: "400px", lg: "500px" } }}
             >
               Register
             </Button>
           ) : (
             <Button
+              onClick={handleLogin}
               size="large"
               variant="contained"
               color="primary"
-              sx={{ width: { xs: "350px", md: "500px" } }}
+              sx={{ width: { xs: "100%", md: "500px" } }}
             >
               Login
             </Button>
@@ -110,6 +180,15 @@ const Signup = () => {
             </Typography>
           </Box>
         </Box>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            severity={alert.severity}
+            sx={{ width: "100%" }}
+          >
+            {alert.message}
+          </Alert>
+        </Snackbar>
       </Grid>
     </Grid>
   );
