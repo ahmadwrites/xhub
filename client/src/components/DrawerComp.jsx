@@ -1,8 +1,10 @@
 import {
+  Avatar,
   Divider,
   Drawer,
   IconButton,
   List,
+  ListItemAvatar,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -15,7 +17,6 @@ import LoginIcon from "@mui/icons-material/Login";
 import HomeIcon from "@mui/icons-material/Home";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import GroupsIcon from "@mui/icons-material/Groups";
-import PersonIcon from "@mui/icons-material/Person";
 import { Link, useNavigate } from "react-router-dom";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import axios from "axios";
@@ -56,7 +57,6 @@ const LIST_TWO = [
     id: 4,
     name: "Profile",
     to: "/profile",
-    icon: <PersonIcon />,
   },
   {
     id: 5,
@@ -89,21 +89,20 @@ const DrawerComp = () => {
         <List sx={{ minWidth: "220px" }}>
           {!currentUser
             ? LIST_ONE.map((page) => (
-                <>
+                <div key={page.id}>
                   {page.id === 4 && <Divider />}
                   <ListItemButton
                     component={Link}
                     to={page.to}
                     onClick={() => setOpenDrawer(false)}
-                    key={page.id}
                   >
                     <ListItemIcon>{page.icon}</ListItemIcon>
                     <ListItemText>{page.name}</ListItemText>
                   </ListItemButton>
-                </>
+                </div>
               ))
             : LIST_TWO.map((page) => (
-                <>
+                <div key={page.id}>
                   {page.id === 4 && <Divider />}
                   <ListItemButton
                     component={Link}
@@ -113,12 +112,20 @@ const DrawerComp = () => {
                         ? signout
                         : () => setOpenDrawer(false)
                     }
-                    key={page.id}
                   >
-                    <ListItemIcon>{page.icon}</ListItemIcon>
+                    {page.icon ? (
+                      <ListItemIcon>{page.icon}</ListItemIcon>
+                    ) : (
+                      <ListItemAvatar>
+                        <Avatar
+                          sx={{ height: "24px", width: "24px" }}
+                          src={currentUser.img}
+                        />
+                      </ListItemAvatar>
+                    )}
                     <ListItemText>{page.name}</ListItemText>
                   </ListItemButton>
-                </>
+                </div>
               ))}
         </List>
       </Drawer>

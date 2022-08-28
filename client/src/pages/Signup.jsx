@@ -30,7 +30,7 @@ const Signup = () => {
   });
 
   const [open, setOpen] = useState(false);
-  const [alert, setAlert] = useState({ message: "", severity: "" });
+  const [alert, setAlert] = useState({ message: "", severity: "success" });
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -66,11 +66,12 @@ const Signup = () => {
     dispatch(loginStart);
 
     try {
+      setOpen(true);
+      setAlert({ message: "Logged in.", severity: "success" });
       const res = await axios.post("/auth/signin", userForm);
       dispatch(loginSuccess(res.data));
-      setOpen(true);
-      setAlert({ message: res.data, severity: "success" });
       navigate("/");
+      // window.location.href = "/";
     } catch (error) {
       dispatch(loginFailure());
       setOpen(true);
@@ -125,6 +126,7 @@ const Signup = () => {
               name="email"
               placeholder="Email"
               label="Email"
+              type="email"
               sx={{ width: { xs: "100%", md: "400px", lg: "500px" } }}
             />
           )}
@@ -182,7 +184,7 @@ const Signup = () => {
             </Typography>
           </Box>
         </Box>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
           <Alert
             onClose={handleClose}
             severity={alert.severity}
