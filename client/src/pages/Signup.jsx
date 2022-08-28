@@ -14,9 +14,11 @@ import axios from "axios";
 import xmum from "../img/xmum.jpg";
 import { useDispatch } from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const toolbarHeight = theme.mixins.toolbar.minHeight;
   const dispatch = useDispatch();
 
@@ -68,7 +70,7 @@ const Signup = () => {
       dispatch(loginSuccess(res.data));
       setOpen(true);
       setAlert({ message: res.data, severity: "success" });
-      window.location.href = "/";
+      navigate("/");
     } catch (error) {
       dispatch(loginFailure());
       setOpen(true);
