@@ -12,11 +12,12 @@ import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/system";
 import axios from "axios";
 import xmum from "../img/xmum.jpg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const { currentUser } = useSelector((state) => state.user);
   const theme = useTheme();
   const navigate = useNavigate();
   const toolbarHeight = theme.mixins.toolbar.minHeight;
@@ -81,6 +82,10 @@ const Signup = () => {
       });
     }
   };
+
+  if (currentUser !== null) {
+    window.location.href = "/";
+  }
 
   return (
     <Grid container sx={{ height: `calc(100vh - ${toolbarHeight}px)` }}>

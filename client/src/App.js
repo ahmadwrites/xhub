@@ -16,7 +16,7 @@ function App() {
           <Route path="/">
             <Route index element={<Home />} />
             <Route path="trending" element={<Home type="trending" />} />
-            <Route path="Signup" element={<Signup />} />
+            <Route path="signup" element={<Signup />} />
             <Route path="groups">
               <Route index element={<Groups />} />
               <Route path=":id" element={<Group />} />

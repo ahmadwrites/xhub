@@ -72,7 +72,7 @@ export const dislike = async (req, res, next) => {
 export const follow = async (req, res, next) => {
   try {
     await Group.findByIdAndUpdate(req.params.id, {
-      $addToSet: { subscriebdUsers: req.user.id },
+      $addToSet: { subscribedUsers: req.user.id },
     });
 
     await User.findByIdAndUpdate(req.user.id, {
@@ -88,7 +88,7 @@ export const follow = async (req, res, next) => {
 export const unfollow = async (req, res, next) => {
   try {
     await Group.findByIdAndUpdate(req.params.id, {
-      $pull: { subscriebdUsers: req.user.id },
+      $pull: { subscribedUsers: req.user.id },
     });
 
     await User.findByIdAndUpdate(req.user.id, {
