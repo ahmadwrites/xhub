@@ -62,7 +62,7 @@ const Groups = () => {
                     },
                   }}
                 >
-                  <Box sx={{ padding: "2rem 2rem" }}>
+                  <Box sx={{ padding: { xs: "1rem", md: "2rem" } }}>
                     <Grid container sx={{ color: "white" }}>
                       <GroupsIcon />{" "}
                       <Typography ml={1} mr="auto">
