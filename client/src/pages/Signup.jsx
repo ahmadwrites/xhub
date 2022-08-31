@@ -15,6 +15,7 @@ import xmum from "../img/xmum.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
+import SERVER_URL from "../serverUrl";
 
 const Signup = () => {
   const { currentUser } = useSelector((state) => state.user);

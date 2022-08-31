@@ -21,7 +21,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import SERVER_URL from "../serverURL";
+import SERVER_URL from "../serverUrl";
 
 const PostCard = ({ post, handleDelete }) => {
   const { currentUser } = useSelector((state) => state.user);

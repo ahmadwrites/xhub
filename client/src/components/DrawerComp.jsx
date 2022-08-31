@@ -23,7 +23,7 @@ import axios from "axios";
 import { logout } from "../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Logout from "@mui/icons-material/Logout";
-import SERVER_URL from "../serverURL";
+import SERVER_URL from "../serverUrl";
 
 const LIST_ONE = [
   { id: 0, name: "Home", to: "/", icon: <HomeIcon /> },

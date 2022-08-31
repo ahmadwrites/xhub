@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import GroupsIcon from "@mui/icons-material/Groups";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import SERVER_URL from "../serverUrl";
 
 const Groups = () => {
   const { currentUser } = useSelector((state) => state.user);

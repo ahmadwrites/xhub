@@ -23,7 +23,7 @@ import { useCallback } from "react";
 import AboutSide from "../components/AboutSide";
 import LinksSide from "../components/LinksSide";
 import RulesSide from "../components/RulesSide";
-import SERVER_URL from "../serverURL";
+import SERVER_URL from "../serverUrl";
 
 const Home = ({ type }) => {
   const { currentUser } = useSelector((state) => state.user);

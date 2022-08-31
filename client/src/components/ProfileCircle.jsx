@@ -13,7 +13,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { logout } from "../redux/userSlice";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
-import SERVER_URL from "../serverURL";
+import SERVER_URL from "../serverUrl";
 
 const ProfileCircle = () => {
   const dispatch = useDispatch();
