@@ -21,6 +21,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import SERVER_URL from "../serverURL";
 
 const PostCard = ({ post, handleDelete }) => {
   const { currentUser } = useSelector((state) => state.user);
@@ -41,7 +42,7 @@ const PostCard = ({ post, handleDelete }) => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await axios.get(`/users/find/${post.userId}`);
+        const res = await axios.get(`${SERVER_URL}/users/find/${post.userId}`);
         setUser(res.data);
       } catch (error) {
         console.log(error);
@@ -50,7 +51,7 @@ const PostCard = ({ post, handleDelete }) => {
 
     const getPost = async () => {
       try {
-        const res = await axios.get(`/groups/${post.groupId}`);
+        const res = await axios.get(`${SERVER_URL}/groups/${post.groupId}`);
         setGroup(res.data);
       } catch (error) {
         console.log(error);
@@ -59,7 +60,7 @@ const PostCard = ({ post, handleDelete }) => {
 
     const getComments = async () => {
       try {
-        const res = await axios.get(`/comments/${post._id}`);
+        const res = await axios.get(`${SERVER_URL}/comments/${post._id}`);
         setComments(res.data);
       } catch (error) {
         console.log(error);

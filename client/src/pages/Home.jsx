@@ -23,6 +23,7 @@ import { useCallback } from "react";
 import AboutSide from "../components/AboutSide";
 import LinksSide from "../components/LinksSide";
 import RulesSide from "../components/RulesSide";
+import SERVER_URL from "../serverURL";
 
 const Home = ({ type }) => {
   const { currentUser } = useSelector((state) => state.user);
@@ -45,14 +46,14 @@ const Home = ({ type }) => {
   const fetchPosts = useCallback(async () => {
     try {
       if (path === "") {
-        const res = await axios.get("/posts");
+        const res = await axios.get(`${SERVER_URL}/posts`);
         setPosts(res.data);
       } else if (path === "trending") {
-        const res = await axios.get("/posts/trending");
+        const res = await axios.get(`${SERVER_URL}/posts/trending`);
         setPosts(res.data);
       } else {
-        const res = await axios.get(`/posts/group/${groupPath}`);
-        const groupRes = await axios.get(`/groups/${groupPath}`);
+        const res = await axios.get(`${SERVER_URL}/posts/group/${groupPath}`);
+        const groupRes = await axios.get(`${SERVER_URL}/groups/${groupPath}`);
         setPosts(res.data);
         setGroup(groupRes.data);
       }
@@ -69,7 +70,7 @@ const Home = ({ type }) => {
     try {
       setOpen(true);
       setAlert({ message: "Post deleted successfully.", severity: "success" });
-      await axios.delete(`/posts/${postId}`);
+      await axios.delete(`${SERVER_URL}/posts/${postId}`);
       fetchPosts();
     } catch (error) {
       setOpen(true);

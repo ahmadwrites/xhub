@@ -23,6 +23,7 @@ import axios from "axios";
 import { logout } from "../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Logout from "@mui/icons-material/Logout";
+import SERVER_URL from "../serverURL";
 
 const LIST_ONE = [
   { id: 0, name: "Home", to: "/", icon: <HomeIcon /> },
@@ -76,7 +77,7 @@ const DrawerComp = () => {
     try {
       dispatch(logout());
       setOpenDrawer(false);
-      await axios.post("/auth/signout");
+      await axios.post(`${SERVER_URL}/auth/signout`);
       navigate("/");
     } catch (error) {
       console.log(error);

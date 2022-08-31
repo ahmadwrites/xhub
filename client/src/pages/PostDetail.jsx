@@ -31,6 +31,7 @@ import { useSelector } from "react-redux";
 import AboutSide from "../components/AboutSide";
 import LinksSide from "../components/LinksSide";
 import RulesSide from "../components/RulesSide";
+import SERVER_URL from "../serverURL";
 
 const PostDetail = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -54,7 +55,7 @@ const PostDetail = () => {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`/posts/${postId}`);
+      await axios.delete(`${SERVER_URL}/posts/${postId}`);
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -64,7 +65,7 @@ const PostDetail = () => {
   useEffect(() => {
     const getPost = async () => {
       try {
-        const res = await axios.get(`/posts/find/${path}`);
+        const res = await axios.get(`${SERVER_URL}/posts/find/${path}`);
         setPost(res.data);
       } catch (error) {
         console.log(error);
@@ -73,7 +74,7 @@ const PostDetail = () => {
 
     const getGroup = async () => {
       try {
-        const res = await axios.get(`/groups/${post?.groupId}`);
+        const res = await axios.get(`${SERVER_URL}/groups/${post?.groupId}`);
         setGroup(res.data);
       } catch (error) {
         console.log(error);
@@ -82,7 +83,7 @@ const PostDetail = () => {
 
     const getUser = async () => {
       try {
-        const res = await axios.get(`/users/find/${post?.userId}`);
+        const res = await axios.get(`${SERVER_URL}/users/find/${post?.userId}`);
         setUser(res.data);
       } catch (error) {
         console.log(error);
@@ -91,7 +92,7 @@ const PostDetail = () => {
 
     const getComments = async () => {
       try {
-        const res = await axios.get(`/comments/${post?._id}`);
+        const res = await axios.get(`${SERVER_URL}/comments/${post?._id}`);
         setComments(res.data);
       } catch (error) {
         console.log(error);

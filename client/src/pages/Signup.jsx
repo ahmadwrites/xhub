@@ -49,7 +49,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`/auth/signup`, userForm);
+      const res = await axios.post(`${SERVER_URL}/auth/signup`, userForm);
       setOpen(true);
       setIsSignup(false);
       setAlert({ message: res.data, severity: "success" });
@@ -69,7 +69,7 @@ const Signup = () => {
     try {
       setOpen(true);
       setAlert({ message: "Logged in.", severity: "success" });
-      const res = await axios.post("/auth/signin", userForm);
+      const res = await axios.post(`${SERVER_URL}/auth/signin`, userForm);
       dispatch(loginSuccess(res.data));
       navigate("/");
       // window.location.href = "/";

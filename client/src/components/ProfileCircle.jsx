@@ -13,6 +13,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { logout } from "../redux/userSlice";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
+import SERVER_URL from "../serverURL";
 
 const ProfileCircle = () => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const ProfileCircle = () => {
   const signout = async () => {
     try {
       dispatch(logout());
-      await axios.post("/auth/signout");
+      await axios.post(`${SERVER_URL}/auth/signout`);
       Navigate("");
     } catch (error) {
       console.log(error);

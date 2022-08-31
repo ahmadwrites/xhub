@@ -17,7 +17,7 @@ const Groups = () => {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const res = await axios.get("/groups/");
+        const res = await axios.get(`${SERVER_URL}/groups/`);
         setGroups(res.data);
       } catch (error) {
         console.log(error);
