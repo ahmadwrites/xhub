@@ -59,7 +59,7 @@ const Navbar = () => {
             sx={{
               backgroundColor: "white",
               marginLeft: "auto",
-              width: { xs: "230px", md: "400px" },
+              width: { xs: "200px", md: "400px" },
               borderRadius: "5px",
             }}
             InputProps={{

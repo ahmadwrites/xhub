@@ -23,7 +23,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import SERVER_URL from "../serverUrl";
 
-const PostCard = ({ post, handleDelete }) => {
+const PostCard = ({ post, handleDelete, inGroup }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [user, setUser] = useState("");
   const [group, setGroup] = useState("");
@@ -114,10 +114,18 @@ const PostCard = ({ post, handleDelete }) => {
               underline="none"
               sx={{ display: "flex", gap: ".5rem" }}
             >
-              <Avatar src={group.img} sx={{ height: "24px", width: "24px" }} />
-              <Typography>g/{group.name}</Typography>
+              <Avatar
+                src={inGroup ? user?.img : group.img}
+                sx={{ height: "24px", width: "24px" }}
+              />
+              <Typography sx={{ display: inGroup ? "none" : "block" }}>
+                g/{group.name}
+              </Typography>
             </Link>
-            <Typography color="text.secondary">
+            <Typography
+              sx={{ display: !inGroup ? { xs: "none", md: "block" } : "block" }}
+              color="text.secondary"
+            >
               Posted by u/{user?.username}
             </Typography>
             <Typography color="text.secondary">

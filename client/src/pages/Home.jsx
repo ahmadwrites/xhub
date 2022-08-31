@@ -163,6 +163,7 @@ const Home = ({ type }) => {
                 handleDelete={handleDelete}
                 key={post._id}
                 post={post}
+                inGroup={type === "group" ? true : false}
               />
             ))}
           </Grid>
