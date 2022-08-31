@@ -146,7 +146,7 @@ const PostCard = ({ post, handleDelete }) => {
           <Grid container mt={1}>
             <Button
               color="inherit"
-              to="/post"
+              to={`/post/${post._id}#comments`}
               component={RouterLink}
               variant="text"
             >
@@ -178,7 +178,11 @@ const PostCard = ({ post, handleDelete }) => {
                     "aria-labelledby": "basic-button",
                   }}
                 >
-                  <MenuItem onClick={handleClose}>
+                  <MenuItem
+                    component={RouterLink}
+                    to={`/edit/${post._id}`}
+                    onClick={handleClose}
+                  >
                     <EditIcon sx={{ marginRight: ".25rem" }} />
                     Edit
                   </MenuItem>
