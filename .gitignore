@@ -38,7 +38,6 @@ jspm_packages
 .DS_Store
 
 #Excluding build directory
-public/
 
 #Exclude environmental files
 .env
