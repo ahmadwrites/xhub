@@ -43,7 +43,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(8800, () => {
+const PORT = process.env.PORT || 8800;
+
+app.listen(PORT, () => {
   connect();
-  console.log("Server running at PORT: 8800");
+  console.log(`Server running at PORT: ${PORT}`);
 });
