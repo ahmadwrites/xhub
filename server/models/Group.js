@@ -29,6 +29,12 @@ const GroupSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    instagram: {
+      type: String,
+    },
+    discord: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

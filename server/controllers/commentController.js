@@ -28,7 +28,7 @@ export const deleteComment = async (req, res, next) => {
 
 export const getComments = async (req, res, next) => {
   try {
-    const comments = await Comment.find({ groupId: req.params.id });
+    const comments = await Comment.find({ postId: req.params.id });
     res.status(200).send(comments);
   } catch (error) {
     next(error);

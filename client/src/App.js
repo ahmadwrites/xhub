@@ -1,7 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Group from "./pages/Group";
 import Groups from "./pages/Groups";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
@@ -19,7 +18,7 @@ function App() {
             <Route path="signup" element={<Signup />} />
             <Route path="groups">
               <Route index element={<Groups />} />
-              <Route path=":id" element={<Group />} />
+              <Route path=":id" element={<Home type="group" />} />
             </Route>
           </Route>
         </Routes>
