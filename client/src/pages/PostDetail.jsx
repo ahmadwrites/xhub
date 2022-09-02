@@ -256,7 +256,11 @@ const PostDetail = () => {
                 <Divider sx={{ margin: "1rem 0" }} />
                 <Box
                   id="comments"
-                  sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "1rem",
+                  }}
                 >
                   {comments.map((comment) => (
                     <CommentCard comment={comment} key={comment._id} />

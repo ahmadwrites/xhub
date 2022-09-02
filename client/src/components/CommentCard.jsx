@@ -43,23 +43,32 @@ const CommentCard = ({ comment }) => {
       elevation={0}
     >
       <Box
-        component={RouterLink}
-        to={`/profile/${user?._id}`}
         sx={{
           display: "flex",
           alignItems: "center",
           gap: ".5rem",
-          textDecoration: "none",
-          color: "inherit",
         }}
       >
-        <Avatar src={user?.img} sx={{ height: "24px", width: "24px" }} />
-        <Typography variant="body2" color="text.secondary">
-          {user?.username}
-        </Typography>
-        <Typography variant="body2" color="text.disabled    ">
-          {format(comment.createdAt)}
-        </Typography>
+        <Box
+          component={RouterLink}
+          to={`/profile/${user?._id}`}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: ".5rem",
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
+          <Avatar src={user?.img} sx={{ height: "24px", width: "24px" }} />
+          <Typography variant="body2" color="text.secondary">
+            {user?.username}
+          </Typography>
+          <Typography variant="body2" color="text.disabled    ">
+            {format(comment.createdAt)}
+          </Typography>
+        </Box>
+
         {currentUser?._id === comment?.userId && (
           <Button
             sx={{ marginLeft: "auto" }}
