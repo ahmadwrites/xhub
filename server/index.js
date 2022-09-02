@@ -3,7 +3,6 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
@@ -14,11 +13,16 @@ const app = express();
 dotenv.config();
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://xmum-lab.netlify.app"],
+    origin: [
+      "http://localhost:3000",
+      "https://xmum-lab.netlify.app",
+      "https://xmu-lab.herokuapp.com",
+      "http://xmu-lab.herokuapp.com",
+    ],
     credentials: true,
   })
 );
-
+app.set("trust proxy", 1);
 const connect = () => {
   mongoose
     .connect(process.env.MONGO)
