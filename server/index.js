@@ -14,7 +14,7 @@ const app = express();
 dotenv.config();
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://xmum-lab.herokuapp.com"],
+    origin: ["http://localhost:3000", "https://xmum-lab.netlify.app"],
     credentials: true,
   })
 );
