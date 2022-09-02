@@ -8,6 +8,8 @@ import {
   MenuItem,
   Paper,
   Typography,
+  TextField,
+  Divider,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
@@ -32,6 +34,7 @@ import AboutSide from "../components/AboutSide";
 import LinksSide from "../components/LinksSide";
 import RulesSide from "../components/RulesSide";
 import SERVER_URL from "../serverUrl";
+import CommentCard from "../components/CommentCard";
 
 const PostDetail = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -240,8 +243,25 @@ const PostDetail = () => {
                     <Typography component="span" color="primary.main">
                       {currentUser.username}
                     </Typography>
+                    <Box component="form" noValidate autoComplete="off">
+                      <div>
+                        <TextField multiline fullWidth />
+                        <Button sx={{ marginTop: "1rem" }} variant="contained">
+                          Comment
+                        </Button>
+                      </div>
+                    </Box>
                   </>
                 )}
+                <Divider sx={{ margin: "1rem 0" }} />
+                <Box
+                  id="comments"
+                  sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+                >
+                  {comments.map((comment) => (
+                    <CommentCard comment={comment} key={comment._id} />
+                  ))}
+                </Box>
               </Grid>
             </Paper>
           </Grid>
