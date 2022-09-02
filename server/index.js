@@ -12,7 +12,12 @@ import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 dotenv.config();
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://xmum-lab.herokuapp.com"],
+    credentials: true,
+  })
+);
 
 const connect = () => {
   mongoose

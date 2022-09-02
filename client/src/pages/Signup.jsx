@@ -70,7 +70,9 @@ const Signup = () => {
     try {
       setOpen(true);
       setAlert({ message: "Logged in.", severity: "success" });
-      const res = await axios.post(`${SERVER_URL}/auth/signin`, userForm);
+      const res = await axios.post(`${SERVER_URL}/auth/signin`, userForm, {
+        withCredentials: true,
+      });
       dispatch(loginSuccess(res.data));
       navigate("/");
       // window.location.href = "/";

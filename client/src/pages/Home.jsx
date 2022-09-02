@@ -70,7 +70,9 @@ const Home = ({ type }) => {
     try {
       setOpen(true);
       setAlert({ message: "Post deleted successfully.", severity: "success" });
-      await axios.delete(`${SERVER_URL}/posts/${postId}`);
+      await axios.delete(`${SERVER_URL}/posts/${postId}`, {
+        withCredentials: true,
+      });
       fetchPosts();
     } catch (error) {
       setOpen(true);

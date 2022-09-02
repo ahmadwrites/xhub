@@ -17,7 +17,7 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -65,6 +65,15 @@ const PostDetail = () => {
     }
   };
 
+  const getComments = useCallback(async () => {
+    try {
+      const res = await axios.get(`${SERVER_URL}/comments/${post?._id}`);
+      setComments(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [post?._id]);
+
   useEffect(() => {
     const getPost = async () => {
       try {
@@ -93,20 +102,22 @@ const PostDetail = () => {
       }
     };
 
-    const getComments = async () => {
-      try {
-        const res = await axios.get(`${SERVER_URL}/comments/${post?._id}`);
-        setComments(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     getUser();
     getPost();
     getGroup();
     getComments();
-  }, [path, post?.groupId, post?.userId, post?._id]);
+  }, [path, post?.groupId, post?.userId, getComments]);
+
+  const deleteComment = async (commentId) => {
+    try {
+      await axios.delete(`${SERVER_URL}/comments/${commentId}`, {
+        withCredentials: true,
+      });
+      getComments();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -263,7 +274,11 @@ const PostDetail = () => {
                   }}
                 >
                   {comments.map((comment) => (
-                    <CommentCard comment={comment} key={comment._id} />
+                    <CommentCard
+                      deleteComment={deleteComment}
+                      comment={comment}
+                      key={comment._id}
+                    />
                   ))}
                 </Box>
               </Grid>

@@ -44,7 +44,7 @@ export const deletePost = async (req, res, next) => {
     if (!post) return next(createError(404, "Post does not exist."));
 
     if (req.user.id === post.userId) {
-      await Comment.deleteMany({ groupId: post.groupId });
+      await Comment.deleteMany({ postId: post._id });
       await Post.findByIdAndDelete(req.params.id);
       res.status(200).json("Successfully deleted post.");
     } else {

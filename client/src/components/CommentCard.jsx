@@ -10,7 +10,7 @@ import axios from "axios";
 import SERVER_URL from "../serverUrl";
 import { format } from "timeago.js";
 
-const CommentCard = ({ comment }) => {
+const CommentCard = ({ comment, deleteComment }) => {
   const { currentUser } = useSelector((state) => state.user);
 
   const [user, setUser] = useState(null);
@@ -64,7 +64,7 @@ const CommentCard = ({ comment }) => {
           <Typography variant="body2" color="text.secondary">
             {user?.username}
           </Typography>
-          <Typography variant="body2" color="text.disabled    ">
+          <Typography variant="body2" color="text.secondary">
             {format(comment.createdAt)}
           </Typography>
         </Box>
@@ -75,6 +75,7 @@ const CommentCard = ({ comment }) => {
             size="small"
             color="error"
             variant="text"
+            onClick={() => deleteComment(comment?._id)}
           >
             <DeleteIcon /> Delete
           </Button>
