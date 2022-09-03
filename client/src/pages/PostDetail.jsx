@@ -10,6 +10,8 @@ import {
   Typography,
   TextField,
   Divider,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
@@ -45,6 +47,17 @@ const PostDetail = () => {
   const [comments, setComments] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const [desc, setDesc] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alert, setAlert] = useState({ message: "", severity: "success" });
+
+  const handleCloseAlert = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenAlert(false);
+  };
 
   const open = Boolean(anchorEl);
 
@@ -114,8 +127,43 @@ const PostDetail = () => {
         withCredentials: true,
       });
       getComments();
+      setAlert({
+        message: "Successfully deleted comment.",
+        severity: "success",
+      });
+      setOpenAlert(true);
     } catch (error) {
-      console.log(error);
+      setAlert({
+        message: "Error, please try again.",
+        severity: "error",
+      });
+      setOpenAlert(true);
+    }
+  };
+
+  const postComment = async (commentForm) => {
+    if (desc.trim() === "") {
+      setAlert({ message: "Please type in something...", severity: "error" });
+      setOpenAlert(true);
+      return;
+    }
+
+    try {
+      await axios.post(
+        `${SERVER_URL}/comments`,
+        { desc, postId: post?._id },
+        { withCredentials: true }
+      );
+      getComments();
+      setDesc("");
+      setAlert({
+        message: "Successfully posted comment.",
+        severity: "success",
+      });
+      setOpenAlert(true);
+    } catch (error) {
+      setAlert({ message: "Error, please try again.", severity: "error" });
+      setOpenAlert(true);
     }
   };
 
@@ -256,8 +304,17 @@ const PostDetail = () => {
                     </Typography>
                     <Box component="form" noValidate autoComplete="off">
                       <div>
-                        <TextField multiline fullWidth />
-                        <Button sx={{ marginTop: "1rem" }} variant="contained">
+                        <TextField
+                          value={desc}
+                          onChange={(e) => setDesc(e.target.value)}
+                          multiline
+                          fullWidth
+                        />
+                        <Button
+                          onClick={postComment}
+                          sx={{ marginTop: "1rem" }}
+                          variant="contained"
+                        >
                           Comment
                         </Button>
                       </div>
@@ -290,6 +347,19 @@ const PostDetail = () => {
             <RulesSide />
           </Grid>
         </Grid>
+        <Snackbar
+          open={openAlert}
+          autoHideDuration={3000}
+          onClose={handleCloseAlert}
+        >
+          <Alert
+            onClose={handleCloseAlert}
+            severity={alert.severity}
+            sx={{ width: "100%" }}
+          >
+            {alert.message}
+          </Alert>
+        </Snackbar>
       </Container>
     </>
   );

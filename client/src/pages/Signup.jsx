@@ -24,7 +24,7 @@ const Signup = () => {
   const toolbarHeight = theme.mixins.toolbar.minHeight;
   const dispatch = useDispatch();
 
-  const [isSignup, setIsSignup] = useState(true);
+  const [isSignup, setIsSignup] = useState(false);
   const [userForm, setUserForm] = useState({
     email: "",
     username: "",

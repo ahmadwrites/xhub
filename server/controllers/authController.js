@@ -28,14 +28,18 @@ export const signin = async (req, res, next) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_KEY);
     const { password, ...others } = user._doc;
 
-    res
-      .cookie("access_token", token, {
-        httpOnly: true,
-        sameSite: "none",
-        secure: true,
-      })
-      .status(200)
-      .json(others);
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
+
+    res.cookie("access_token-legacy", token, {
+      httpOnly: true,
+      secure: true,
+    });
+
+    res.status(200).json(others);
   } catch (error) {
     next(error);
   }
@@ -44,6 +48,7 @@ export const signin = async (req, res, next) => {
 export const signout = (req, res, next) => {
   try {
     res.clearCookie("access_token");
+    res.clearCookie("access_token-legacy");
     res.status(200).json("Successfully logged out.");
   } catch (error) {
     next(error);

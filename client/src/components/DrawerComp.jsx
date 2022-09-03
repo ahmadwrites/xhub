@@ -41,7 +41,6 @@ const LIST_ONE = [
     to: "/signup",
     icon: <LoginIcon />,
   },
-  { id: 5, name: "Register", to: "/signup", icon: <AppRegistrationIcon /> },
 ];
 
 const LIST_TWO = [

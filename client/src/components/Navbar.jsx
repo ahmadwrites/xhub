@@ -105,7 +105,7 @@ const Navbar = () => {
                     to="/signup"
                     variant="contained"
                   >
-                    Register
+                    Login
                   </Button>
                 )}
               </Box>
