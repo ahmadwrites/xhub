@@ -71,7 +71,9 @@ const PostDetail = () => {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`${SERVER_URL}/posts/${postId}`);
+      await axios.delete(`${SERVER_URL}/posts/${postId}`, {
+        withCredentials: true,
+      });
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -239,7 +241,7 @@ const PostDetail = () => {
                   <Typography variant="h6" mt={1}>
                     {post?.title}
                   </Typography>
-                  <Typography>{post?.content}</Typography>
+                  <div dangerouslySetInnerHTML={{ __html: post?.content }} />
                   <Grid container mt={1}>
                     <Button
                       color="inherit"

@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Divider, Grid, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { Link } from "react-router-dom";
 import GroupsIcon from "@mui/icons-material/Groups";
 
 const AboutSide = (props) => {
@@ -31,10 +32,14 @@ const AboutSide = (props) => {
             </Grid>
           </>
         )}
-        <Divider variant="middle" sx={{ margin: "1rem 0" }} />
-        <Button variant="contained" fullWidth>
-          Create Post
-        </Button>
+        {!props.create && (
+          <>
+            <Divider variant="middle" sx={{ margin: "1rem 0" }} />
+            <Button component={Link} to="/create" variant="contained" fullWidth>
+              Create Post
+            </Button>
+          </>
+        )}
       </Box>
     </Paper>
   );

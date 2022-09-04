@@ -18,7 +18,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { Link, useNavigate } from "react-router-dom";
-import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import CreateIcon from "@mui/icons-material/Create";
 import axios from "axios";
 import { logout } from "../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,14 +52,15 @@ const LIST_TWO = [
     icon: <LocalFireDepartmentIcon />,
   },
   { id: 2, name: "Groups", to: "/groups", icon: <GroupsIcon /> },
-  { id: 3, name: "About", to: "/about", icon: <InfoIcon /> },
+  { id: 3, name: "Create", to: "/create", icon: <CreateIcon /> },
+  { id: 4, name: "About", to: "/about", icon: <InfoIcon /> },
   {
-    id: 4,
+    id: 5,
     name: "Profile",
     to: "/profile",
   },
   {
-    id: 5,
+    id: 6,
     name: "Logout",
     to: "",
     icon: <Logout />,
@@ -103,7 +104,7 @@ const DrawerComp = () => {
               ))
             : LIST_TWO.map((page) => (
                 <div key={page.id}>
-                  {page.id === 4 && <Divider />}
+                  {page.id === 5 && <Divider />}
                   <ListItemButton
                     component={Link}
                     to={page.to}

@@ -97,6 +97,14 @@ const Navbar = () => {
                 ))}
                 {currentUser ? (
                   <>
+                    <Link
+                      to="/create"
+                      component={RouterLink}
+                      underline="none"
+                      sx={{ color: "inherit" }}
+                    >
+                      Create
+                    </Link>
                     <ProfileCircle />
                   </>
                 ) : (

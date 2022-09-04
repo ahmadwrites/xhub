@@ -141,16 +141,17 @@ const PostCard = ({ post, handleDelete, inGroup }) => {
             <Typography variant="h6" mt={1}>
               {post.title}
             </Typography>
-            <Typography
-              sx={{
+
+            <div
+              style={{
                 display: "-webkit-box",
                 WebkitLineClamp: "1",
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
+                maxHeight: "300px",
               }}
-            >
-              {post.content}
-            </Typography>
+              dangerouslySetInnerHTML={{ __html: post?.content }}
+            />
           </Link>
           <Grid container mt={1}>
             <Button
