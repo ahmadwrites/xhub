@@ -12,7 +12,7 @@ import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 import { Box, Container } from "@mui/system";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import PostCard from "../components/PostCard";
 import { Link as RouterLink } from "react-router-dom";
@@ -24,6 +24,7 @@ import AboutSide from "../components/AboutSide";
 import LinksSide from "../components/LinksSide";
 import RulesSide from "../components/RulesSide";
 import SERVER_URL from "../serverUrl";
+import { subscription } from "../redux/userSlice";
 
 const Home = ({ type }) => {
   const { currentUser } = useSelector((state) => state.user);
@@ -31,6 +32,7 @@ const Home = ({ type }) => {
   const groupPath = useLocation().pathname.split("/")[2];
   const [posts, setPosts] = useState([]);
   const [group, setGroup] = useState(null);
+  const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
   const [alert, setAlert] = useState({ message: "", severity: "success" });
@@ -46,8 +48,15 @@ const Home = ({ type }) => {
   const fetchPosts = useCallback(async () => {
     try {
       if (path === "") {
-        const res = await axios.get(`${SERVER_URL}/posts`);
-        setPosts(res.data);
+        if (currentUser) {
+          const res = await axios.get(`${SERVER_URL}/posts/following`, {
+            withCredentials: true,
+          });
+          setPosts(res.data);
+        } else {
+          const res = await axios.get(`${SERVER_URL}/posts`);
+          setPosts(res.data);
+        }
       } else if (path === "trending") {
         const res = await axios.get(`${SERVER_URL}/posts/trending`);
         setPosts(res.data);
@@ -60,7 +69,29 @@ const Home = ({ type }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [path, groupPath]);
+  }, [path, groupPath, currentUser]);
+
+  const handleSubscribe = async () => {
+    if (currentUser?.subscribedGroups?.includes(groupPath)) {
+      await axios.put(
+        `${SERVER_URL}/users/unfollow/${groupPath}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+    } else {
+      await axios.put(
+        `${SERVER_URL}/users/follow/${groupPath}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+    }
+    dispatch(subscription(groupPath));
+    fetchPosts();
+  };
 
   useEffect(() => {
     fetchPosts();
@@ -92,7 +123,7 @@ const Home = ({ type }) => {
           }}
         ></Box>
       )}
-      <Container sx={{ marginTop: "2rem" }} maxWidth="xl">
+      <Container sx={{ marginTop: "2rem", marginBottom: "2rem" }} maxWidth="xl">
         <Grid container sx={{ gap: "2rem", justifyContent: "center" }}>
           <Grid
             item
@@ -171,7 +202,12 @@ const Home = ({ type }) => {
           </Grid>
           <Grid item xs={12} md={3}>
             {type === "group" ? (
-              <AboutSide group={group} name={group?.name} desc={group?.desc} />
+              <AboutSide
+                handleSubscribe={handleSubscribe}
+                group={group}
+                name={group?.name}
+                desc={group?.desc}
+              />
             ) : (
               <AboutSide
                 name="XLab"

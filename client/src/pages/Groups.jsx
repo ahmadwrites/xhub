@@ -5,27 +5,53 @@ import { Button, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import GroupsIcon from "@mui/icons-material/Groups";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import SERVER_URL from "../serverUrl";
+import { subscription } from "../redux/userSlice";
+import { useCallback } from "react";
 
 const Groups = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [groups, setGroups] = useState([]);
+  const dispatch = useDispatch();
+
+  const handleSubscribe = async (group) => {
+    if (currentUser.subscribedGroups.includes(group._id)) {
+      await axios.put(
+        `${SERVER_URL}/users/unfollow/${group._id}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+    } else {
+      await axios.put(
+        `${SERVER_URL}/users/follow/${group._id}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+    }
+    dispatch(subscription(group._id));
+    fetchGroups();
+  };
+
+  const fetchGroups = useCallback(async () => {
+    try {
+      const res = await axios.get(`${SERVER_URL}/groups/`);
+      setGroups(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        const res = await axios.get(`${SERVER_URL}/groups/`);
-        setGroups(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchGroups();
-  }, []);
+  }, [fetchGroups]);
 
   return (
     <>
@@ -72,13 +98,22 @@ const Groups = () => {
                       {currentUser &&
                       group?.subscribedUsers?.includes(currentUser._id) ? (
                         <>
-                          <Button size="small" variant="text" color="error">
+                          <Button
+                            onClick={() => handleSubscribe(group)}
+                            size="small"
+                            variant="text"
+                            color="error"
+                          >
                             <RemoveIcon /> Unfollow
                           </Button>
                         </>
                       ) : (
                         <>
-                          <Button size="small" variant="text">
+                          <Button
+                            onClick={() => handleSubscribe(group)}
+                            size="small"
+                            variant="text"
+                          >
                             <AddIcon /> Follow
                           </Button>
                         </>

@@ -1,10 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Button, Divider, Grid, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { Link } from "react-router-dom";
 import GroupsIcon from "@mui/icons-material/Groups";
 
 const AboutSide = (props) => {
+  const { currentUser } = useSelector((state) => state.user);
+
   return (
     <Paper elevation={1}>
       <Box sx={{ backgroundColor: "#333", padding: "1rem" }}>
@@ -20,10 +23,18 @@ const AboutSide = (props) => {
             <Grid container alignItems="center">
               <Button
                 variant="outlined"
+                color={
+                  currentUser?.subscribedGroups.includes(props.group?._id)
+                    ? "error"
+                    : "primary"
+                }
                 size="small"
+                onClick={props.handleSubscribe}
                 sx={{ marginRight: "auto" }}
               >
-                Join
+                {currentUser?.subscribedGroups.includes(props.group?._id)
+                  ? "Unfollow"
+                  : "Join"}
               </Button>
               <Typography sx={{ display: "flex", alignItems: "center" }}>
                 <GroupsIcon sx={{ marginRight: ".5rem" }} />{" "}

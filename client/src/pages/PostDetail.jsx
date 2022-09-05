@@ -31,12 +31,13 @@ import EditIcon from "@mui/icons-material/Edit";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AboutSide from "../components/AboutSide";
 import LinksSide from "../components/LinksSide";
 import RulesSide from "../components/RulesSide";
 import SERVER_URL from "../serverUrl";
 import CommentCard from "../components/CommentCard";
+import { subscription } from "../redux/userSlice";
 
 const PostDetail = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -47,6 +48,7 @@ const PostDetail = () => {
   const [comments, setComments] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [desc, setDesc] = useState("");
   const [openAlert, setOpenAlert] = useState(false);
   const [alert, setAlert] = useState({ message: "", severity: "success" });
@@ -89,20 +91,20 @@ const PostDetail = () => {
     }
   }, [post?._id]);
 
+  const getGroup = useCallback(async () => {
+    try {
+      const res = await axios.get(`${SERVER_URL}/groups/${post?.groupId}`);
+      setGroup(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [post?.groupId]);
+
   useEffect(() => {
     const getPost = async () => {
       try {
         const res = await axios.get(`${SERVER_URL}/posts/find/${path}`);
         setPost(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const getGroup = async () => {
-      try {
-        const res = await axios.get(`${SERVER_URL}/groups/${post?.groupId}`);
-        setGroup(res.data);
       } catch (error) {
         console.log(error);
       }
@@ -121,7 +123,7 @@ const PostDetail = () => {
     getPost();
     getGroup();
     getComments();
-  }, [path, post?.groupId, post?.userId, getComments]);
+  }, [path, post?.groupId, post?.userId, getComments, getGroup]);
 
   const deleteComment = async (commentId) => {
     try {
@@ -141,6 +143,28 @@ const PostDetail = () => {
       });
       setOpenAlert(true);
     }
+  };
+
+  const handleSubscribe = async () => {
+    if (currentUser.subscribedGroups.includes(post?.groupId)) {
+      await axios.put(
+        `${SERVER_URL}/users/unfollow/${post?.groupId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+    } else {
+      await axios.put(
+        `${SERVER_URL}/users/follow/${post?.groupId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+    }
+    dispatch(subscription(post?.groupId));
+    getGroup();
   };
 
   const postComment = async (commentForm) => {
@@ -171,14 +195,24 @@ const PostDetail = () => {
 
   return (
     <>
-      <Box
+      <Link
+        component={RouterLink}
         sx={{
           background: `url(${group?.img}) center`,
           backgroundSize: "cover",
           height: { xs: "100px", md: "150px", xl: "200px" },
         }}
-      ></Box>
-      <Container sx={{ marginTop: "2rem" }} maxWidth="xl">
+        to={`/groups/${group?._id}`}
+      >
+        <Box
+          sx={{
+            background: `url(${group?.img}) center`,
+            backgroundSize: "cover",
+            height: { xs: "100px", md: "150px", xl: "200px" },
+          }}
+        ></Box>
+      </Link>
+      <Container sx={{ marginTop: "2rem", marginBottom: "2rem" }} maxWidth="xl">
         <Grid container sx={{ gap: "2rem", justifyContent: "center" }}>
           <Grid item xs={12} md={8}>
             <Paper elevation={1}>
@@ -344,7 +378,12 @@ const PostDetail = () => {
             </Paper>
           </Grid>
           <Grid item xs={12} md={3}>
-            <AboutSide group={group} name={group?.name} desc={group?.desc} />
+            <AboutSide
+              handleSubscribe={handleSubscribe}
+              group={group}
+              name={group?.name}
+              desc={group?.desc}
+            />
             <LinksSide group={group} />
             <RulesSide />
           </Grid>

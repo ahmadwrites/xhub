@@ -1,4 +1,5 @@
 import {
+  Alert,
   Autocomplete,
   Avatar,
   Button,
@@ -6,19 +7,21 @@ import {
   Container,
   Divider,
   Grid,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import AboutSide from "../components/AboutSide";
 import LinksSide from "../components/LinksSide";
 import RulesSide from "../components/RulesSide";
+import { subscription } from "../redux/userSlice";
 import SERVER_URL from "../serverUrl";
 
 const Create = () => {
@@ -28,6 +31,16 @@ const Create = () => {
   const [group, setgroup] = useState(null);
   const [contents, setContents] = useState("");
   const [title, setTitle] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alert, setAlert] = useState({ message: "", severity: "success" });
+
+  const handleCloseAlert = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenAlert(false);
+  };
   const navigate = useNavigate();
 
   const loading = open && options.length === 0;
@@ -78,7 +91,49 @@ const Create = () => {
         },
         { withCredentials: true }
       );
+      setAlert({
+        message: "Successfully added post.",
+        severity: "success",
+      });
       navigate(`/post/${res.data._id}`);
+    } catch (error) {
+      console.log(error);
+      setAlert({
+        message: "Error, please try again.",
+        severity: "error",
+      });
+      setOpenAlert(true);
+    }
+  };
+
+  const dispatch = useDispatch();
+
+  const handleSubscribe = async () => {
+    if (currentUser.subscribedGroups.includes(group._id)) {
+      await axios.put(
+        `${SERVER_URL}/users/unfollow/${group._id}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+    } else {
+      await axios.put(
+        `${SERVER_URL}/users/follow/${group._id}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+    }
+    dispatch(subscription(group._id));
+    getGroup();
+  };
+
+  const getGroup = async () => {
+    try {
+      const res = await axios.get(`${SERVER_URL}/groups/${group?._id}`);
+      setgroup(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -199,6 +254,7 @@ const Create = () => {
           {group && (
             <>
               <AboutSide
+                handleSubscribe={handleSubscribe}
                 group={group}
                 name={group?.name}
                 desc={group?.desc}
@@ -210,6 +266,19 @@ const Create = () => {
           <RulesSide />
         </Grid>
       </Grid>
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={3000}
+        onClose={handleCloseAlert}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity={alert.severity}
+          sx={{ width: "100%" }}
+        >
+          {alert.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
