@@ -30,8 +30,12 @@ const ProfileCircle = () => {
 
   const signout = async () => {
     try {
+      await axios.post(
+        `${SERVER_URL}/auth/signout`,
+        {},
+        { withCredentials: true }
+      );
       dispatch(logout());
-      await axios.post(`${SERVER_URL}/auth/signout`);
       Navigate("");
     } catch (error) {
       console.log(error);

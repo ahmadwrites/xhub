@@ -105,7 +105,6 @@ const Edit = () => {
         `${SERVER_URL}/posts/${currentPost._id}`,
         {
           title,
-          groupId: group,
           content: contents,
         },
         { withCredentials: true }
@@ -177,42 +176,6 @@ const Edit = () => {
             Edit a post
           </Typography>
           <Divider />
-          <Autocomplete
-            id="asynchronous-demo"
-            sx={{ width: 300 }}
-            open={open}
-            onOpen={() => {
-              setOpen(true);
-            }}
-            onClose={() => {
-              setOpen(false);
-            }}
-            onChange={(event, value) => setGroup(value)}
-            isOptionEqualToValue={(option, value) => option._id === value._id}
-            getOptionLabel={(option) => option.name}
-            options={options}
-            loading={loading}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Select a group"
-                InputProps={{
-                  ...params.InputProps,
-                  startAdornment: group ? (
-                    <Avatar sx={{ marginRight: ".5rem" }} src={group?.img} />
-                  ) : null,
-                  endAdornment: (
-                    <>
-                      {loading ? (
-                        <CircularProgress color="inherit" size={20} />
-                      ) : null}
-                      {params.InputProps.endAdornment}
-                    </>
-                  ),
-                }}
-              />
-            )}
-          />
           <TextField
             name="title"
             label="Title"
@@ -280,7 +243,7 @@ const Edit = () => {
         </Grid>
 
         <Grid item xs={12} md={3}>
-          {group && (
+          {/* {group && (
             <>
               <AboutSide
                 handleSubscribe={handleSubscribe}
@@ -291,7 +254,7 @@ const Edit = () => {
               />
               <LinksSide group={group} />
             </>
-          )}
+          )} */}
           <RulesSide />
         </Grid>
       </Grid>

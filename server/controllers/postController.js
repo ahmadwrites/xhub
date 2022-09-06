@@ -82,7 +82,7 @@ export const groupPosts = async (req, res, next) => {
 
 export const trendingPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find().sort({ views: -1 });
+    const posts = await Post.find().sort({ likes: -1, createdAt: -1 });
     res.status(200).json(posts);
   } catch (error) {
     next(error);

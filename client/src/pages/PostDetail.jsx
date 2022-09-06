@@ -100,16 +100,16 @@ const PostDetail = () => {
     }
   }, [post?.groupId]);
 
-  useEffect(() => {
-    const getPost = async () => {
-      try {
-        const res = await axios.get(`${SERVER_URL}/posts/find/${path}`);
-        setPost(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const getPost = useCallback(async () => {
+    try {
+      const res = await axios.get(`${SERVER_URL}/posts/find/${path}`);
+      setPost(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [path]);
 
+  useEffect(() => {
     const getUser = async () => {
       try {
         const res = await axios.get(`${SERVER_URL}/users/find/${post?.userId}`);
@@ -123,7 +123,7 @@ const PostDetail = () => {
     getPost();
     getGroup();
     getComments();
-  }, [path, post?.groupId, post?.userId, getComments, getGroup]);
+  }, [path, post?.groupId, post?.userId, getComments, getGroup, getPost]);
 
   const deleteComment = async (commentId) => {
     try {
@@ -193,6 +193,40 @@ const PostDetail = () => {
     }
   };
 
+  const handleLike = async (postId) => {
+    try {
+      await axios.put(
+        `${SERVER_URL}/users/like/${postId}`,
+        {},
+        { withCredentials: true }
+      );
+      setOpenAlert(true);
+      setAlert({ message: "Post liked successfully.", severity: "success" });
+      getPost();
+    } catch (error) {
+      setOpenAlert(true);
+      setAlert({ message: "Something went wrong.", severity: "error" });
+      console.log(error);
+    }
+  };
+
+  const handleDislike = async (postId) => {
+    try {
+      await axios.put(
+        `${SERVER_URL}/users/dislike/${postId}`,
+        {},
+        { withCredentials: true }
+      );
+      setOpenAlert(true);
+      setAlert({ message: "Post disliked successfully.", severity: "success" });
+      getPost();
+    } catch (error) {
+      setOpenAlert(true);
+      setAlert({ message: "Something went wrong.", severity: "error" });
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Link
@@ -227,26 +261,51 @@ const PostDetail = () => {
                     gap: ".5rem",
                   }}
                 >
-                  <Typography
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      cursor: "pointer",
-                      "&:hover": { color: "success.main" },
-                    }}
-                  >
-                    <ArrowUpwardIcon /> {post?.likes.length}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      cursor: "pointer",
-                      "&:hover": { color: "error.main" },
-                    }}
-                  >
-                    <ArrowDownwardIcon /> {post?.dislikes.length}
-                  </Typography>
+                  {currentUser ? (
+                    <>
+                      <Button
+                        onClick={() => handleLike(post?._id)}
+                        color={
+                          post?.likes.includes(currentUser?._id)
+                            ? "success"
+                            : "inherit"
+                        }
+                        sx={{ "&:hover": { color: "success.main" } }}
+                      >
+                        <ArrowUpwardIcon /> {post?.likes.length}
+                      </Button>
+                      <Button
+                        onClick={() => handleDislike(post?._id)}
+                        color={
+                          post?.dislikes.includes(currentUser?._id)
+                            ? "error"
+                            : "inherit"
+                        }
+                        sx={{ "&:hover": { color: "error.main" } }}
+                      >
+                        <ArrowDownwardIcon /> {post?.dislikes.length}
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        component={RouterLink}
+                        color="inherit"
+                        to="/signup"
+                        sx={{ "&:hover": { color: "success.main" } }}
+                      >
+                        <ArrowUpwardIcon /> {post.likes.length}
+                      </Button>
+                      <Button
+                        component={RouterLink}
+                        color="inherit"
+                        to="/signup"
+                        sx={{ "&:hover": { color: "error.main" } }}
+                      >
+                        <ArrowDownwardIcon /> {post.dislikes.length}
+                      </Button>
+                    </>
+                  )}
                 </Grid>
                 <Grid item xs={9}>
                   <Box
@@ -286,7 +345,13 @@ const PostDetail = () => {
                       <ChatBubbleOutlineIcon sx={{ marginRight: ".25rem" }} />
                       {comments.length} Comments
                     </Button>
-                    <Button color="inherit" variant="text">
+                    <Button
+                      component={Link}
+                      href={`https://api.whatsapp.com/send?text=https://xmum-lab.netlify.app/post/${post?._id}`}
+                      target="_blank"
+                      color="inherit"
+                      variant="text"
+                    >
                       <ShareIcon sx={{ marginRight: ".25rem" }} /> Share
                     </Button>
                     {post?.userId === currentUser?._id && (

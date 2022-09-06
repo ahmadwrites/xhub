@@ -112,6 +112,40 @@ const Home = ({ type }) => {
     }
   };
 
+  const handleLike = async (postId) => {
+    try {
+      await axios.put(
+        `${SERVER_URL}/users/like/${postId}`,
+        {},
+        { withCredentials: true }
+      );
+      setOpen(true);
+      setAlert({ message: "Post liked successfully.", severity: "success" });
+      fetchPosts();
+    } catch (error) {
+      setOpen(true);
+      setAlert({ message: "Something went wrong.", severity: "error" });
+      console.log(error);
+    }
+  };
+
+  const handleDislike = async (postId) => {
+    try {
+      await axios.put(
+        `${SERVER_URL}/users/dislike/${postId}`,
+        {},
+        { withCredentials: true }
+      );
+      setOpen(true);
+      setAlert({ message: "Post disliked successfully.", severity: "success" });
+      fetchPosts();
+    } catch (error) {
+      setOpen(true);
+      setAlert({ message: "Something went wrong.", severity: "error" });
+      console.log(error);
+    }
+  };
+
   return (
     <>
       {groupPath && (
@@ -193,6 +227,8 @@ const Home = ({ type }) => {
             </Paper>
             {posts.map((post) => (
               <PostCard
+                handleLike={handleLike}
+                handleDislike={handleDislike}
                 handleDelete={handleDelete}
                 key={post._id}
                 post={post}

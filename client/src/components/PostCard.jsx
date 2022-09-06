@@ -23,7 +23,13 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import SERVER_URL from "../serverUrl";
 
-const PostCard = ({ post, handleDelete, inGroup }) => {
+const PostCard = ({
+  post,
+  handleDelete,
+  inGroup,
+  handleLike,
+  handleDislike,
+}) => {
   const { currentUser } = useSelector((state) => state.user);
   const [user, setUser] = useState("");
   const [group, setGroup] = useState("");
@@ -85,26 +91,47 @@ const PostCard = ({ post, handleDelete, inGroup }) => {
             gap: ".5rem",
           }}
         >
-          <Typography
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              cursor: "pointer",
-              "&:hover": { color: "success.main" },
-            }}
-          >
-            <ArrowUpwardIcon /> {post.likes.length}
-          </Typography>
-          <Typography
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              cursor: "pointer",
-              "&:hover": { color: "error.main" },
-            }}
-          >
-            <ArrowDownwardIcon /> {post.dislikes.length}
-          </Typography>
+          {currentUser ? (
+            <>
+              <Button
+                onClick={() => handleLike(post?._id)}
+                color={
+                  post.likes.includes(currentUser?._id) ? "success" : "inherit"
+                }
+                sx={{ "&:hover": { color: "success.main" } }}
+              >
+                <ArrowUpwardIcon /> {post.likes.length}
+              </Button>
+              <Button
+                onClick={() => handleDislike(post?._id)}
+                color={
+                  post.dislikes.includes(currentUser?._id) ? "error" : "inherit"
+                }
+                sx={{ "&:hover": { color: "error.main" } }}
+              >
+                <ArrowDownwardIcon /> {post.dislikes.length}
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                component={RouterLink}
+                color="inherit"
+                to="/signup"
+                sx={{ "&:hover": { color: "success.main" } }}
+              >
+                <ArrowUpwardIcon /> {post.likes.length}
+              </Button>
+              <Button
+                component={RouterLink}
+                color="inherit"
+                to="/signup"
+                sx={{ "&:hover": { color: "error.main" } }}
+              >
+                <ArrowDownwardIcon /> {post.dislikes.length}
+              </Button>
+            </>
+          )}
         </Grid>
         <Grid item xs={9}>
           <Box sx={{ display: "flex", gap: ".5rem", alignItems: "center" }}>
@@ -148,7 +175,7 @@ const PostCard = ({ post, handleDelete, inGroup }) => {
                 WebkitLineClamp: "1",
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
-                maxHeight: "300px",
+                maxHeight: "100px",
               }}
               dangerouslySetInnerHTML={{ __html: post?.content }}
             />
@@ -163,7 +190,13 @@ const PostCard = ({ post, handleDelete, inGroup }) => {
               <ChatBubbleOutlineIcon sx={{ marginRight: ".25rem" }} />
               {comments.length} Comments
             </Button>
-            <Button color="inherit" variant="text">
+            <Button
+              component={Link}
+              href={`https://api.whatsapp.com/send?text=https://xmum-lab.netlify.app/post/${post?._id}`}
+              target="_blank"
+              color="inherit"
+              variant="text"
+            >
               <ShareIcon sx={{ marginRight: ".25rem" }} /> Share
             </Button>
             {post.userId === currentUser?._id && (
