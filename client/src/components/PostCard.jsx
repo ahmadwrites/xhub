@@ -94,41 +94,47 @@ const PostCard = ({
           {currentUser ? (
             <>
               <Button
+                size="small"
                 onClick={() => handleLike(post?._id)}
                 color={
-                  post.likes.includes(currentUser?._id) ? "success" : "inherit"
+                  post?.likes.includes(currentUser?._id) ? "success" : "inherit"
                 }
                 sx={{ "&:hover": { color: "success.main" } }}
               >
-                <ArrowUpwardIcon /> {post.likes.length}
+                <ArrowUpwardIcon /> {post?.likes.length}
               </Button>
               <Button
+                size="small"
                 onClick={() => handleDislike(post?._id)}
                 color={
-                  post.dislikes.includes(currentUser?._id) ? "error" : "inherit"
+                  post?.dislikes.includes(currentUser?._id)
+                    ? "error"
+                    : "inherit"
                 }
                 sx={{ "&:hover": { color: "error.main" } }}
               >
-                <ArrowDownwardIcon /> {post.dislikes.length}
+                <ArrowDownwardIcon /> {post?.dislikes.length}
               </Button>
             </>
           ) : (
             <>
               <Button
+                size="small"
                 component={RouterLink}
                 color="inherit"
                 to="/signup"
                 sx={{ "&:hover": { color: "success.main" } }}
               >
-                <ArrowUpwardIcon /> {post.likes.length}
+                <ArrowUpwardIcon /> {post?.likes.length}
               </Button>
               <Button
+                size="small"
                 component={RouterLink}
                 color="inherit"
                 to="/signup"
                 sx={{ "&:hover": { color: "error.main" } }}
               >
-                <ArrowDownwardIcon /> {post.dislikes.length}
+                <ArrowDownwardIcon /> {post?.dislikes.length}
               </Button>
             </>
           )}
