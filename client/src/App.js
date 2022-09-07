@@ -36,6 +36,7 @@ function App() {
   useEffect(() => {
     if (currentUser !== null && getCookie("cookie_exists") === null) {
       setTimeout(dispatch(logout()), 10000);
+      console.log(getCookie("cookie_exists") + " from app");
     }
   }, [currentUser, dispatch]);
 
