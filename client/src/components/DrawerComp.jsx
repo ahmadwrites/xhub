@@ -75,9 +75,13 @@ const DrawerComp = () => {
 
   const signout = async () => {
     try {
-      dispatch(logout());
       setOpenDrawer(false);
-      await axios.post(`${SERVER_URL}/auth/signout`);
+      await axios.post(
+        `${SERVER_URL}/auth/signout`,
+        {},
+        { withCredentials: true }
+      );
+      dispatch(logout());
       navigate("/");
     } catch (error) {
       console.log(error);

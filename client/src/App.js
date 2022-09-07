@@ -1,4 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Create from "./pages/Create";
@@ -7,9 +9,36 @@ import Groups from "./pages/Groups";
 import Home from "./pages/Home";
 import PostDetail from "./pages/PostDetail";
 import Signup from "./pages/Signup";
+import { logout } from "./redux/userSlice";
 import theme from "./theme";
 
+function getCookie(name) {
+  // Split cookie string and get all individual name=value pairs in an array
+  var cookieArr = document.cookie.split(";");
+  // Loop through the array elements
+  for (var i = 0; i < cookieArr.length; i++) {
+    var cookiePair = cookieArr[i].split("=");
+    /* Removing whitespace at the beginning of the cookie name
+      and compare it with the given string */
+    if (name === cookiePair[0].trim()) {
+      // Decode the cookie value and return
+      return decodeURIComponent(cookiePair[1]);
+    }
+  }
+  // Return null if not found
+  return null;
+}
+
 function App() {
+  const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (currentUser !== null && getCookie("cookie_exists") === null) {
+      dispatch(logout());
+    }
+  }, [currentUser, dispatch]);
+
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>

@@ -2,15 +2,7 @@ import jwt from "jsonwebtoken";
 import { createError } from "./error.js";
 
 export const verifyToken = (req, res, next) => {
-  let token = null;
-
-  if (req.cookies["access_token"]) {
-    // check the new style cookie first
-    token = req.cookies["access_token"];
-  } else if (req.cookies["access_token-legacy"]) {
-    // otherwise fall back to the legacy cookie
-    token = req.cookies["access_token-legacy"];
-  }
+  const token = req.cookies["access_token"];
 
   if (!token) return next(createError(404, "Token does not exist"));
 

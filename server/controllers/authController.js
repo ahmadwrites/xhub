@@ -34,9 +34,9 @@ export const signin = async (req, res, next) => {
       secure: true,
     });
 
-    res.cookie("access_token-legacy", token, {
-      httpOnly: true,
+    res.cookie("cookie_exists", token, {
       secure: true,
+      sameSite: "none",
     });
 
     res.status(200).json(others);
@@ -48,7 +48,7 @@ export const signin = async (req, res, next) => {
 export const signout = (req, res, next) => {
   try {
     res.clearCookie("access_token");
-    res.clearCookie("access_token-legacy");
+    res.clearCookie("cookie_exists");
     res.status(200).json("Successfully logged out.");
   } catch (error) {
     next(error);
