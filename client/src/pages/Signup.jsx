@@ -74,7 +74,7 @@ const Signup = () => {
         withCredentials: true,
       });
       dispatch(loginSuccess(res.data));
-      navigate("/");
+      // navigate("/");
       // window.location.href = "/";
     } catch (error) {
       dispatch(loginFailure());
@@ -86,9 +86,9 @@ const Signup = () => {
     }
   };
 
-  if (currentUser !== null) {
-    window.location.href = "/";
-  }
+  // if (currentUser !== null) {
+  //   window.location.href = "/";
+  // }
 
   return (
     <Grid container sx={{ height: `calc(100vh - ${toolbarHeight}px)` }}>
