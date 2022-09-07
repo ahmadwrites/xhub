@@ -38,7 +38,7 @@ function App() {
       setTimeout(dispatch(logout()), 10000);
       console.log(getCookie("cookie_exists") + " from app");
     }
-  }, [currentUser, dispatch]);
+  });
 
   return (
     <ThemeProvider theme={theme}>
