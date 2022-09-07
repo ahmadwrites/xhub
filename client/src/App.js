@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@emotion/react";
+import { current } from "@reduxjs/toolkit";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -34,11 +35,8 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (currentUser !== null && getCookie("cookie_exists") === null) {
-      setTimeout(dispatch(logout()), 10000);
-      console.log(getCookie("cookie_exists") + " from app");
-    }
-  });
+    console.log(getCookie("cookie_exists"));
+  }, [currentUser]);
 
   return (
     <ThemeProvider theme={theme}>
