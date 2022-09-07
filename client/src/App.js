@@ -35,7 +35,7 @@ function App() {
 
   useEffect(() => {
     if (currentUser !== null && getCookie("cookie_exists") === null) {
-      dispatch(logout());
+      setTimeout(dispatch(logout()), 10000);
     }
   }, [currentUser, dispatch]);
 
