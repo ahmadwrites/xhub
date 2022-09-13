@@ -156,7 +156,13 @@ const PostCard = ({
               </Typography>
             </Link>
             <Typography
-              sx={{ display: !inGroup ? { xs: "none", md: "block" } : "block" }}
+              component={RouterLink}
+              to={`/profile/${post?.userId}`}
+              sx={{
+                display: !inGroup ? { xs: "none", md: "block" } : "block",
+                textDecoration: "none",
+                "&:hover": { textDecoration: "underline" },
+              }}
               color="text.secondary"
             >
               Posted by u/{user?.username}

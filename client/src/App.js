@@ -1,43 +1,17 @@
 import { ThemeProvider } from "@emotion/react";
-import { current } from "@reduxjs/toolkit";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Create from "./pages/Create";
 import Edit from "./pages/Edit";
+import EditProfile from "./pages/EditProfile";
 import Groups from "./pages/Groups";
 import Home from "./pages/Home";
 import PostDetail from "./pages/PostDetail";
+import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
-import { logout } from "./redux/userSlice";
 import theme from "./theme";
 
-function getCookie(name) {
-  // Split cookie string and get all individual name=value pairs in an array
-  var cookieArr = document.cookie.split(";");
-  // Loop through the array elements
-  for (var i = 0; i < cookieArr.length; i++) {
-    var cookiePair = cookieArr[i].split("=");
-    /* Removing whitespace at the beginning of the cookie name
-      and compare it with the given string */
-    if (name === cookiePair[0].trim()) {
-      // Decode the cookie value and return
-      return decodeURIComponent(cookiePair[1]);
-    }
-  }
-  // Return null if not found
-  return null;
-}
-
 function App() {
-  const { currentUser } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    console.log(getCookie("cookie_exists"));
-  }, [currentUser]);
-
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
@@ -50,6 +24,10 @@ function App() {
             <Route path="create" element={<Create />} />
             <Route path="edit/:id" element={<Edit />} />
             <Route path="post/:id" element={<PostDetail />} />
+            <Route path="profile">
+              <Route path="edit" element={<EditProfile />} />
+              <Route path=":id" element={<Profile />} />
+            </Route>
             <Route path="groups">
               <Route index element={<Groups />} />
               <Route path=":id" element={<Home type="group" />} />

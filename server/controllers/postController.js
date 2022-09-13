@@ -118,3 +118,14 @@ export const following = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUserPosts = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    const posts = await Post.find({ userId: user._id });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+};

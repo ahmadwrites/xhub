@@ -43,30 +43,6 @@ const LIST_ONE = [
   },
 ];
 
-const LIST_TWO = [
-  { id: 0, name: "Home", to: "/", icon: <HomeIcon /> },
-  {
-    id: 1,
-    name: "Trending",
-    to: "/trending",
-    icon: <LocalFireDepartmentIcon />,
-  },
-  { id: 2, name: "Groups", to: "/groups", icon: <GroupsIcon /> },
-  { id: 3, name: "Create", to: "/create", icon: <CreateIcon /> },
-  { id: 4, name: "About", to: "/about", icon: <InfoIcon /> },
-  {
-    id: 5,
-    name: "Profile",
-    to: "/profile",
-  },
-  {
-    id: 6,
-    name: "Logout",
-    to: "",
-    icon: <Logout />,
-  },
-];
-
 const DrawerComp = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
@@ -87,6 +63,30 @@ const DrawerComp = () => {
       console.log(error);
     }
   };
+
+  const LIST_TWO = [
+    { id: 0, name: "Home", to: "/", icon: <HomeIcon /> },
+    {
+      id: 1,
+      name: "Trending",
+      to: "/trending",
+      icon: <LocalFireDepartmentIcon />,
+    },
+    { id: 2, name: "Groups", to: "/groups", icon: <GroupsIcon /> },
+    { id: 3, name: "Create", to: "/create", icon: <CreateIcon /> },
+    { id: 4, name: "About", to: "/about", icon: <InfoIcon /> },
+    {
+      id: 5,
+      name: "Profile",
+      to: `/profile/${currentUser._id}`,
+    },
+    {
+      id: 6,
+      name: "Logout",
+      to: "",
+      icon: <Logout />,
+    },
+  ];
 
   return (
     <>

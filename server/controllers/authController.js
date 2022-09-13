@@ -34,10 +34,10 @@ export const signin = async (req, res, next) => {
       secure: true,
     });
 
-    res.cookie("cookie_exists", token, {
-      secure: true,
-      sameSite: "none",
-    });
+    // res.cookie("cookie_exists", token, {
+    //   secure: true,
+    //   sameSite: "none",
+    // });
 
     res.status(200).json(others);
   } catch (error) {

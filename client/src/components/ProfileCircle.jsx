@@ -9,9 +9,11 @@ import {
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LogoutIcon from "@mui/icons-material/Logout";
+import SettingsIcon from "@mui/icons-material/Settings";
 import PersonIcon from "@mui/icons-material/Person";
 import { logout } from "../redux/userSlice";
 import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import SERVER_URL from "../serverUrl";
 
@@ -65,11 +67,21 @@ const ProfileCircle = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={handleClose}
+          component={Link}
+          to={`/profile/${currentUser._id}`}
+        >
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
           <ListItemText>Profile</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={handleClose} component={Link} to={`/profile/edit`}>
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText>Settings</ListItemText>
         </MenuItem>
         <MenuItem onClick={signout}>
           <ListItemIcon>

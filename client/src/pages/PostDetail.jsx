@@ -327,7 +327,15 @@ const PostDetail = () => {
                       />
                       <Typography>g/{group?.name}</Typography>
                     </Link>
-                    <Typography color="text.secondary">
+                    <Typography
+                      component={RouterLink}
+                      to={`/profile/${post?.userId}`}
+                      sx={{
+                        textDecoration: "none",
+                        "&:hover": { textDecoration: "underline" },
+                      }}
+                      color="text.secondary"
+                    >
                       Posted by u/{user?.username}
                     </Typography>
                     <Typography color="text.secondary">
