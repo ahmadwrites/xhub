@@ -78,7 +78,7 @@ const DrawerComp = () => {
     {
       id: 5,
       name: "Profile",
-      to: `/profile/${currentUser._id}`,
+      to: `/profile/${currentUser?._id}`,
     },
     {
       id: 6,
