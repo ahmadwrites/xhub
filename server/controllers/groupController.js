@@ -62,3 +62,23 @@ export const getGroups = async (req, res, next) => {
     next(error);
   }
 };
+
+export const searchGroup = async (req, res, next) => {
+  const query = req.query.q;
+
+  try {
+    const posts = await Group.find({
+      $or: [
+        {
+          name: { $regex: query, $options: "i" },
+        },
+        {
+          shortName: { $regex: query, $options: "i" },
+        },
+      ],
+    }).limit(40);
+    res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+};

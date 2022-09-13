@@ -1,28 +1,31 @@
 import {
   Alert,
-  Avatar,
-  Button,
+  Box,
   Container,
   Grid,
-  Paper,
   Snackbar,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import SERVER_URL from "../serverUrl";
 import axios from "axios";
-import PostCard from "../components/PostCard";
-import { Box } from "@mui/system";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { useCallback } from "react";
-const Profile = () => {
-  const { currentUser } = useSelector((state) => state.user);
+import { useSearchParams } from "react-router-dom";
+import PostCard from "../components/PostCard";
+import SERVER_URL from "../serverUrl";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import GroupCard from "../components/GroupCard";
+
+const Search = () => {
+  const [value, setValue] = useState("1");
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   const [posts, setPosts] = useState([]);
-  const [user, setUser] = useState(null);
-  const location = useLocation().pathname.split("/")[2];
+  const [groups, setGroups] = useState([]);
   const [open, setOpen] = useState(false);
   const [alert, setAlert] = useState({ message: "", severity: "success" });
 
@@ -33,6 +36,8 @@ const Profile = () => {
 
     setOpen(false);
   };
+  const [searchParams] = useSearchParams();
+  searchParams.get("title");
 
   const handleDelete = async (postId) => {
     try {
@@ -85,26 +90,32 @@ const Profile = () => {
 
   const getPosts = useCallback(async () => {
     try {
-      const res = await axios.get(`${SERVER_URL}/posts/user/${location}`);
+      const res = await axios.get(
+        `${SERVER_URL}/posts/search?q=${searchParams.get("title")}`
+      );
       setPosts(res.data);
     } catch (error) {
       console.log(error);
     }
-  }, [location]);
+  }, [searchParams]);
+
+  const getGroups = useCallback(async () => {
+    try {
+      const res = await axios.get(
+        `${SERVER_URL}/groups/search?q=${searchParams.get("title")}`
+      );
+      setGroups(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const res = await axios.get(`${SERVER_URL}/users/find/${location}`);
-        setUser(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     getPosts();
-    getUser();
-  }, [location, getPosts]);
+    getGroups();
+  }, [getPosts, getGroups]);
+
+  console.log(groups);
 
   return (
     <Container sx={{ marginTop: "2rem", marginBottom: "2rem" }} maxWidth="xl">
@@ -122,18 +133,54 @@ const Profile = () => {
           md={8}
           sx={{ display: "flex", gap: "1rem", flexDirection: "column" }}
         >
-          {posts?.map((post) => (
-            <PostCard
-              handleDelete={handleDelete}
-              handleLike={handleLike}
-              handleDislike={handleDislike}
-              key={post?._id}
-              post={post}
-            />
-          ))}
+          <Typography variant="h6">
+            Searching for {searchParams.get("title")}:
+          </Typography>
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <TabList onChange={handleChange} aria-label="Posts">
+                <Tab label="Posts" value="1" />
+                <Tab label="Groups" value="2" />
+              </TabList>
+            </Box>
+            <TabPanel
+              sx={{
+                padding: 0,
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+              }}
+              value="1"
+            >
+              {posts?.length === 0
+                ? `No posts yet related to ${searchParams.get("title")}...`
+                : posts?.map((post) => (
+                    <PostCard
+                      handleDelete={handleDelete}
+                      handleDislike={handleDislike}
+                      handleLike={handleLike}
+                      key={post?._id}
+                      post={post}
+                    />
+                  ))}
+            </TabPanel>
+            <TabPanel
+              sx={{
+                padding: 0,
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+              }}
+              value="2"
+            >
+              {groups.map((group) => (
+                <GroupCard key={group?._id} group={group} />
+              ))}
+            </TabPanel>
+          </TabContext>
         </Grid>
         <Grid item xs={12} md={3}>
-          <Paper elevation={1}>
+          {/* <Paper elevation={1}>
             <Box
               sx={{
                 display: "flex",
@@ -144,32 +191,8 @@ const Profile = () => {
                 textAlign: "center",
                 flexDirection: "column",
               }}
-            >
-              <Avatar
-                sx={{
-                  height: "64px",
-                  width: "64px",
-                  border: "2px solid #1976d2",
-                }}
-                src={user?.img}
-              />
-              <Typography variant="h4">{user?.username}</Typography>
-              <Typography>{user?.desc}</Typography>
-              <Typography variant="body2" color="text.secondary">
-                {posts?.length} Posts
-              </Typography>
-              {currentUser?._id === location && (
-                <Button
-                  component={Link}
-                  to="/profile/edit"
-                  sx={{ width: "100%" }}
-                  variant="contained"
-                >
-                  Edit Profile
-                </Button>
-              )}
-            </Box>
-          </Paper>
+            ></Box>
+          </Paper> */}
         </Grid>
       </Grid>
       <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
@@ -185,4 +208,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Search;

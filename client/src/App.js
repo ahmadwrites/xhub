@@ -8,6 +8,7 @@ import Groups from "./pages/Groups";
 import Home from "./pages/Home";
 import PostDetail from "./pages/PostDetail";
 import Profile from "./pages/Profile";
+import Search from "./pages/Search";
 import Signup from "./pages/Signup";
 import theme from "./theme";
 
@@ -28,6 +29,7 @@ function App() {
               <Route path="edit" element={<EditProfile />} />
               <Route path=":id" element={<Profile />} />
             </Route>
+            <Route path="search" element={<Search />} />
             <Route path="groups">
               <Route index element={<Groups />} />
               <Route path=":id" element={<Home type="group" />} />
